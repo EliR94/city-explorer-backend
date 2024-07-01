@@ -249,10 +249,14 @@ describe("DELETE /api/bucket_list/:bucket_list_id", () => {
 });
 
 
-// filter by type and accessibity
+//update table and seed to include radius in cities table (and update tests accordingly)
 
 //error handling:
 //posting place by user not in user list
 //posting a place that doesnt have a user or city or long/lat
 
 // make endpoints.json
+
+// filter by type and accessibity
+
+
