@@ -1,0 +1,14 @@
+ {
+        "name": "places/ChIJURDKN2eAhYARN0AMzUEaiKo",
+        "id": "ChIJURDKN2eAhYARN0AMzUEaiKo",
+        "types": [
+            "seafood_restaurant",
+            "restaurant",
+            "food",
+            "point_of_interest",
+            "establishment"
+        ],
+        "nationalPhoneNumber": "(415) 397-8880",
+        "internationalPhoneNumber": "+1 415-397-8880",
+        "formattedAddress": "PIER 1 1/2 The Embarcadero N, San Francisco, CA 94111, USA"
+    }
