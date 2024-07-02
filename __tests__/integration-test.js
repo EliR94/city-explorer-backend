@@ -4,6 +4,7 @@ const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
 const placeData = require("../db/data/test-data/place.json");
+const endpoints = require("../endpoints.json")
 
 beforeEach(() => {
   return seed(testData);
@@ -20,6 +21,18 @@ describe("Invalid paths", () => {
       });
   });
 });
+
+describe("GET /api", ()=>{
+  test("200 status code: returns json object containing all endpoints", ()=>{
+    return request(app)
+    .get("/api")
+    .expect(200)
+    .then(({body})=>{
+      expect(body.endpoints).toEqual(endpoints)
+    })
+  })
+})
+
 
 describe("GET /api/cities", () => {
   test("200 status code: returns array of all cities", () => {

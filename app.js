@@ -3,9 +3,12 @@ const cors = require('cors');
 const { getCities, getCityByName, getCitiesByUser } = require('./controllers/cities.controller');
 const { getUsers, getUserByUsername, postUser } = require('./controllers/users.controller');
 const { getBucketList, getBucketListByUser, postPlace, removePlace } = require('./controllers/bucket_list.controller');
+const { getEndpoints } = require('./controllers/endpoints.controller');
 const app = express()
 app.use(cors());
 app.use(express.json())
+
+app.get('/api', getEndpoints)
 
 app.get('/api/cities', getCities)
 
