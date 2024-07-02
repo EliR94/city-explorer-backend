@@ -2,7 +2,7 @@ const db = require('../db/connection')
 const fs = require('fs/promises')
 
 exports.fetchCities = (username)=>{
-  let queryStr = "SELECT cities.city_name, cities.city_longitude, cities.city_latitude FROM cities"
+  let queryStr = "SELECT cities.city_name, cities.city_longitude, cities.city_latitude, cities.city_radius FROM cities"
   const queryArr = []
   if(username){
     queryStr += ' RIGHT JOIN bucket_list ON cities.city_name = bucket_list.city_name WHERE bucket_list.username = $1 GROUP BY cities.city_name'

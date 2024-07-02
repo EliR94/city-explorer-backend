@@ -29,7 +29,6 @@ exports.postUser = (req,res, next)=>{
         addUser(body).then((addedUser)=>{
             res.status(201).send({addedUser})
         }).catch((err)=>{
-            console.error("error in postUser", err)
             next(err)
         })
     }

@@ -32,7 +32,7 @@ exports.fetchUserByUsername = (username) => {
     return db.query(formattedQuery).then(({rows})=>{
       return rows[0]
     })
-    .catch((err)=>{console.error(err)
+    .catch((err)=>{
     throw err
     })
   }

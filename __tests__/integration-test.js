@@ -27,12 +27,13 @@ describe("GET /api/cities", () => {
       .get("/api/cities")
       .expect(200)
       .then(({ body }) => {
-        expect(body.cities.length).toBe(3);
+        expect(body.cities.length).toBe(36);
         body.cities.forEach((city) => {
           expect(city).toMatchObject({
             city_name: expect.any(String),
             city_latitude: expect.any(Number),
             city_longitude: expect.any(Number),
+            city_radius: expect.any(Number),
           });
         });
       });
@@ -66,6 +67,14 @@ describe("GET /api/cities", () => {
           });
         });
       });
+  });
+  test('404 status code: No user with that username! if passed a username query that does not exist in the users table', () => {
+    return request(app)
+    .get("/api/cities?username=smalltraveller")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("No user with that username!")
+    })
   });
 });
 
@@ -194,6 +203,22 @@ describe("GET /api/bucket_list/:username", () => {
       });
     });
   });
+  test("404 status code: No user with that name! when passed a username that does not match any username in database", () => {
+    return request(app)
+      .get("/api/bucket_list/random")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No user with that username!");
+      });
+  });
+  test('404 status code: No city with that name! if passed a city_name query that does not exist in the city table', () => {
+    return request(app)
+    .get("/api/bucket_list/bigtraveller?city_name=Landon")
+    .expect(404)
+    .then(({ body }) => {
+      expect(body.msg).toBe("No city with that name!")
+    })
+  });
 });
 
 describe("POST /api/users", () => {
@@ -211,6 +236,17 @@ describe("POST /api/users", () => {
           password: "passypassword",
         });
       });
+  });
+  test('400 staus code: Incomplete POST request: one or more required fields missing data', () => {
+    return request(app)
+    .post("/api/users")
+    .send({
+      username: "newuser2",
+    })
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Incomplete POST request: one or more required fields missing data")
+    });
   });
 });
 
@@ -235,6 +271,33 @@ describe("POST /api/bucket_list", () => {
         });
       });
   });
+  test('400 staus code: Incomplete POST request: one or more required fields missing data', () => {
+    return request(app)
+    .post("/api/bucket_list")
+    .send({
+      place_displayname: "Bullring & Grand Central",
+      place_json: placeData,
+      username: "madexplorer",
+    })
+    .expect(400)
+    .then(({ body }) => {
+      expect(body.msg).toBe("Incomplete POST request: one or more required fields missing data")
+    });
+  });
+  test("404 status code: No user with that name! when passed a username that does not match any username in database", () => {
+    return request(app)
+      .post("/api/bucket_list")
+      .send({
+        place_displayname: "Bullring & Grand Central",
+        place_json: placeData,
+        city_name: "Birmingham",
+        username: "notauser",
+      })
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("No user with that username!");
+      });
+  });
 });
 
 describe("DELETE /api/bucket_list/:bucket_list_id", () => {
@@ -246,17 +309,20 @@ describe("DELETE /api/bucket_list/:bucket_list_id", () => {
       expect(Object.keys(response)).not.toInclude("body")
     })
   });
+  test('404 status code: No bucket list item exists with that id', () => {
+    return request(app)
+    .delete('/api/bucket_list/999')
+    .expect(404)
+    .then(({body}) => {
+      expect(body.msg).toBe("Place does not exist")
+    })
+  });
+  test('400 status code: Invalid input: expected a number', () => {
+    return request(app)
+    .delete('/api/bucket_list/id')
+    .expect(400)
+    .then(({body}) => {
+      expect(body.msg).toBe("Invalid input: expected a number")
+    })
+  });
 });
-
-
-//update table and seed to include radius in cities table (and update tests accordingly)
-
-//error handling:
-//posting place by user not in user list
-//posting a place that doesnt have a user or city or long/lat
-
-// make endpoints.json
-
-// filter by type and accessibity
-
-

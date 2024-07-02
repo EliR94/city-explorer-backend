@@ -18,7 +18,8 @@ const seed = ({ citiesData, userData, bucketListData }) => {
       CREATE TABLE cities (
         city_name VARCHAR PRIMARY KEY,
         city_longitude DOUBLE PRECISION NOT NULL,
-        city_latitude DOUBLE PRECISION NOT NULL
+        city_latitude DOUBLE PRECISION NOT NULL,
+        city_radius INT
       );`);
 
       const usersTablePromise = db.query(`
@@ -46,11 +47,12 @@ CREATE TABLE bucket_list (
     })
     .then(() => {
       const insertCitiesQueryStr = format(
-        "INSERT INTO cities (city_name, city_longitude, city_latitude) VALUES %L RETURNING *;",
-        citiesData.map(({ city_name, longitude, latitude }) => [
+        "INSERT INTO cities (city_name, city_longitude, city_latitude, city_radius) VALUES %L RETURNING *;",
+        citiesData.map(({ city_name, longitude, latitude, radius }) => [
           city_name,
           longitude,
           latitude,
+          radius
         ])
       );
       return db.query(insertCitiesQueryStr);
