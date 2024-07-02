@@ -2,10 +2,12 @@
   "name": "city-explorer-backend",
   "version": "1.0.0",
   "description": "city-explorer-backend",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
+    "start": "node listen.js",
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
+    "seed-prod": "NODE_ENV=production npm run seed",
     "test": "jest",
     "prepare": "husky install"
   },
@@ -24,14 +26,14 @@
     "husky": "^8.0.2",
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "supertest": "^7.0.0"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.19.2",
-    "pg": "^8.7.3",
-    "supertest": "^7.0.0"
+    "pg": "^8.7.3"
   },
   "jest": {
     "setupFilesAfterEnv": [
