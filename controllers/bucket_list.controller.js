@@ -26,6 +26,7 @@ exports.getBucketListByUser = (req, res, next)=>{
 
 exports.postPlace = (req, res, next) =>{
     const {body} = req
+    let rejectStatus = false
     if(!body.city_name || !body.place_displayname || !body.place_json || !body.username){
         res.status(400).send({msg: "Incomplete POST request: one or more required fields missing data"})
     }
@@ -33,17 +34,20 @@ exports.postPlace = (req, res, next) =>{
         for(let i=0;i<response.length;i++){
             if(response[i].place_json.id === body.place_json.id){
                 res.status(400).send({msg: "Bad POST request: this item is already in this users bucket list"})
+                rejectStatus = true
             }
         }
-    })
-    const promisesArr = [fetchUserByUsername(body.username), addPlace(body)]
+        if (rejectStatus=== false){
+            const promisesArr = [fetchUserByUsername(body.username), addPlace(body)]
     Promise.all(promisesArr).then((promises)=>{
         const addedPlace = promises[1]
         res.status(201).send({addedPlace})
     }).catch((err)=>{
         next(err)
     })
+    
 }
+    })}
 
 exports.removePlace = (req, res, next) => {
     const { bucket_list_id } = req.params
