@@ -1,4 +1,4 @@
-const { use } = require("../app")
+const { use, response } = require("../app")
 const { fetchBucketList, fetchBucketListByUser, addPlace, deletePlace } = require("../models/bucket_list.model")
 const { fetchCityByName } = require("../models/cities.model")
 const { fetchUserByUsername } = require("../models/users.model")
@@ -29,6 +29,13 @@ exports.postPlace = (req, res, next) =>{
     if(!body.city_name || !body.place_displayname || !body.place_json || !body.username){
         res.status(400).send({msg: "Incomplete POST request: one or more required fields missing data"})
     }
+    fetchBucketListByUser(body.username, body.city_name).then((response)=>{
+        for(let i=0;i<response.length;i++){
+            if(response[i].place_json.id === body.place_json.id){
+                res.status(400).send({msg: "Bad POST request: this item is already in this users bucket list"})
+            }
+        }
+    })
     const promisesArr = [fetchUserByUsername(body.username), addPlace(body)]
     Promise.all(promisesArr).then((promises)=>{
         const addedPlace = promises[1]

@@ -4,6 +4,7 @@ const db = require("../db/connection.js");
 const seed = require("../db/seeds/seed.js");
 const testData = require("../db/data/test-data/index.js");
 const placeData = require("../db/data/test-data/place.json");
+const placeNEWData = require("../db/data/test-data/placeNEW.json")
 const endpoints = require("../endpoints.json")
 
 beforeEach(() => {
@@ -270,7 +271,7 @@ describe("POST /api/bucket_list", () => {
       .post("/api/bucket_list")
       .send({
         place_displayname: "Bullring & Grand Central",
-        place_json: placeData,
+        place_json: placeNEWData,
         city_name: "Birmingham",
         username: "madexplorer",
       })
@@ -279,7 +280,7 @@ describe("POST /api/bucket_list", () => {
         expect(body.addedPlace).toMatchObject({
             bucket_list_id: expect.any(Number),
             place_displayname: "Bullring & Grand Central",
-            place_json: placeData,
+            place_json: placeNEWData,
             city_name: "Birmingham",
             username: "madexplorer",
         });
@@ -290,7 +291,7 @@ describe("POST /api/bucket_list", () => {
     .post("/api/bucket_list")
     .send({
       place_displayname: "Bullring & Grand Central",
-      place_json: placeData,
+      place_json: placeNEWData,
       username: "madexplorer",
     })
     .expect(400)
@@ -303,7 +304,7 @@ describe("POST /api/bucket_list", () => {
       .post("/api/bucket_list")
       .send({
         place_displayname: "Bullring & Grand Central",
-        place_json: placeData,
+        place_json: placeNEWData,
         city_name: "Birmingham",
         username: "notauser",
       })
@@ -312,6 +313,20 @@ describe("POST /api/bucket_list", () => {
         expect(body.msg).toBe("No user with that username!");
       });
   });
+  test("400 status code: this item is already in this users bucket list. when passed an item that is already in the users bucket list", () => {
+    return request(app)
+      .post("/api/bucket_list")
+      .send({
+        place_displayname: "TEST",
+        place_json: placeData,
+        city_name: "London",
+        username: "madexplorer",
+      })
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad POST request: this item is already in this users bucket list");
+      });
+  })
 });
 
 describe("DELETE /api/bucket_list/:bucket_list_id", () => {
