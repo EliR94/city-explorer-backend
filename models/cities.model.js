@@ -8,6 +8,7 @@ exports.fetchCities = (username)=>{
     queryStr += ' RIGHT JOIN bucket_list ON cities.city_name = bucket_list.city_name WHERE bucket_list.username = $1 GROUP BY cities.city_name'
     queryArr.push(username)
   }
+  queryStr += ' ORDER BY cities.city_name ASC'
     return db.query(queryStr, queryArr)
     .then(({rows})=>{
         if(rows.length ===0){

@@ -3,10 +3,15 @@
     "description": "serves up a json representation of all the available endpoints of the api"
   },
   "GET /api/cities": {
-    "description": "serves an array of all cities objects and their longitude and latitude, filtered by user if username query is given",
+    "description": "serves an array of all cities objects (in alphabetical order). including: city name, longitude, latitude and radius, filtered by user if username query is given",
     "queries": ["username"],
     "exampleResponse": {
-      "cities": [{ "city_name": "london", "city_longitude": "-0.1275", "city_latitude": "51.5072" }]
+      "cities": [{
+        "city_name": "London",
+        "city_longitude": -0.1275,
+        "city_latitude": 51.5072,
+        "city_radius": 12000
+      }]
     }
   },
   "GET /api/users": {

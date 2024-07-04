@@ -35,12 +35,13 @@ describe("GET /api", ()=>{
 
 
 describe("GET /api/cities", () => {
-  test("200 status code: returns array of all cities", () => {
+  test("200 status code: returns array of all cities in alphabetical order", () => {
     return request(app)
       .get("/api/cities")
       .expect(200)
       .then(({ body }) => {
-        expect(body.cities.length).toBe(36);
+        expect(body.cities.length).toBe(36)
+        expect(body.cities).toBeSortedBy('city_name', {descending: false})
         body.cities.forEach((city) => {
           expect(city).toMatchObject({
             city_name: expect.any(String),
