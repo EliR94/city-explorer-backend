@@ -19,7 +19,8 @@ const seed = ({ citiesData, userData, bucketListData }) => {
         city_name VARCHAR PRIMARY KEY,
         city_longitude DOUBLE PRECISION NOT NULL,
         city_latitude DOUBLE PRECISION NOT NULL,
-        city_radius INT
+        city_radius INT,
+        city_rectangle JSONB NOT NULL
       );`);
 
       const usersTablePromise = db.query(`
@@ -40,19 +41,18 @@ CREATE TABLE bucket_list (
   place_json JSONB NOT NULL,
   city_name VARCHAR REFERENCES cities(city_name) NOT NULL,
   username VARCHAR REFERENCES users(username) NOT NULL
- 
- 
 )`)
         .catch((err) => console.log(err, 'error here'));
     })
     .then(() => {
       const insertCitiesQueryStr = format(
-        "INSERT INTO cities (city_name, city_longitude, city_latitude, city_radius) VALUES %L RETURNING *;",
-        citiesData.map(({ city_name, longitude, latitude, radius }) => [
+        "INSERT INTO cities (city_name, city_longitude, city_latitude, city_radius, city_rectangle) VALUES %L RETURNING *",
+        citiesData.map(({ city_name, longitude, latitude, radius, rectangle }) => [
           city_name,
           longitude,
           latitude,
-          radius
+          radius,
+          rectangle
         ])
       );
       return db.query(insertCitiesQueryStr);
@@ -97,22 +97,3 @@ CREATE TABLE bucket_list (
 };
 
 module.exports = seed;
-
-
-// //   primary_type VARCHAR,
-//   formattedaddress VARCHAR,
-//   phone_number VARCHAR,
-//   editorial_summary VARCHAR,
-//   user_rating_count INT,
-// wheelchair_accessible BOOL,
-// price_level VARCHAR,
-// more photos, reviews, regular opening times
-
-// place_name VARCHAR NOT NULL,
-// place_displayname VARCHAR NOT NULL,
-// photo_uri VARCHAR,
-// rating FLOAT,
-// website_uri VARCHAR,
-// attraction_types TEXT[],
-// place_longitude DOUBLE PRECISION NOT NULL,
-// place_latitude DOUBLE PRECISION NOT NULL,

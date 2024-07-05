@@ -3617,7 +3617,7 @@ city_name: 'London',
         }
     }
 },
-city_name: 'Birmingham',
+city_name: 'Bath',
     username: 'bigtraveller'
 }
 ];

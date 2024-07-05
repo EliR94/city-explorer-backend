@@ -41,7 +41,7 @@ describe("GET /api/cities", () => {
       .get("/api/cities")
       .expect(200)
       .then(({ body }) => {
-        expect(body.cities.length).toBe(36)
+        expect(body.cities.length).toBe(3)
         expect(body.cities).toBeSortedBy('city_name', {descending: false})
         body.cities.forEach((city) => {
           expect(city).toMatchObject({
@@ -272,7 +272,7 @@ describe("POST /api/bucket_list", () => {
       .send({
         place_displayname: "Bullring & Grand Central",
         place_json: placeNEWData,
-        city_name: "Birmingham",
+        city_name: "Bath",
         username: "madexplorer",
       })
       .expect(201)
@@ -281,7 +281,7 @@ describe("POST /api/bucket_list", () => {
             bucket_list_id: expect.any(Number),
             place_displayname: "Bullring & Grand Central",
             place_json: placeNEWData,
-            city_name: "Birmingham",
+            city_name: "Bath",
             username: "madexplorer",
         });
       });
